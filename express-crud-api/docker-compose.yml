@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: todos
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/Documenti/DockerContainer/pgdate:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./server/
+      dockerfile: DockerFile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USER: admin
+      DB_PASSWORD: secret
+      DB_NAME: todos
+      # NODE_ENV: production
